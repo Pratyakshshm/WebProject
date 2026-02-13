@@ -1,48 +1,88 @@
+/* ===== GLOBAL ===== */
 body{
-font-family:Arial;
-text-align:center;
+font-family: Arial, sans-serif;
+margin:0;
 background:#f4f7fb;
+text-align:center;
 }
 
-
+/* ===== NAVBAR ===== */
 nav{
 background:#333;
-padding:10px;
+padding:12px;
 }
-
 
 nav a{
 color:white;
-margin:10px;
+margin:15px;
 text-decoration:none;
-transition:0.3s;
+font-size:18px;
+transition:.3s;
 }
-
 
 nav a:hover{
-color:yellow;
+color:#ffd54f;
 }
 
+
+/* ===== HEADINGS ===== */
+h1{
+margin-top:25px;
+color:#333;
+}
+
+h2{
+margin-bottom:10px;
+}
+
+
+/* ===== CARD BOX ===== */
 .box{
 background:white;
 padding:20px;
-margin:20px auto;
+margin:25px auto;
 width:260px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+transition:.3s;
+}
+
+.box:hover{
+transform:scale(1.03);
 }
 
 
+/* ===== SUBJECT CARDS ===== */
 .subject{
 background:white;
 padding:15px;
-margin:15px auto;
-width:300px;
-border-radius:10px;
-box-shadow:0 0 8px rgba(0,0,0,0.1);
+margin:20px auto;
+width:320px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.12);
+transition:.3s;
+}
+
+.subject:hover{
+transform:translateY(-4px);
 }
 
 
+/* ===== INPUTS ===== */
+input{
+padding:8px;
+margin:5px;
+border-radius:6px;
+border:1px solid #ccc;
+outline:none;
+}
+
+input:focus{
+border-color:#4CAF50;
+}
+
+
+/* ===== BUTTONS ===== */
 button{
 padding:8px 15px;
 border:none;
@@ -50,26 +90,66 @@ background:#4CAF50;
 color:white;
 cursor:pointer;
 margin:5px;
-transition:0.3s;
+border-radius:6px;
+transition:.3s;
+font-weight:bold;
 }
-
-
 
 button:hover{
 background:#2e7d32;
+transform:scale(1.05);
 }
 
+
+/* ===== TASK LIST ===== */
+ul{
+padding:0;
+}
 
 li{
 list-style:none;
 padding:8px;
-margin:5px;
+margin:6px;
 background:#eee;
-border-radius:5px;
+border-radius:6px;
+cursor:pointer;
+transition:.2s;
 }
 
+li:hover{
+background:#ddd;
+}
 
+/* completed task */
 .done{
 text-decoration:line-through;
 background:#c8e6c9;
+color:#2e7d32;
+}
+
+
+/* ===== TIMER ===== */
+#time{
+font-size:48px;
+margin:20px;
+color:#333;
+}
+
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:500px){
+
+.subject{
+width:90%;
+}
+
+.box{
+width:90%;
+}
+
+nav a{
+display:block;
+margin:10px 0;
+}
+
 }
