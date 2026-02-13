@@ -1,14 +1,6 @@
 console.log("JS Loaded");
 
 
-// ================= LOGIN PROTECTION =================
-if(!localStorage.getItem("loggedUser") && !location.href.includes("index.html")){
-alert("Please login first");
-location.href="index.html";
-}
-
-
-// ================= USER SYSTEM =================
 function getUsers(){
 return JSON.parse(localStorage.getItem("users") || "[]");
 }
@@ -17,39 +9,12 @@ function saveUsers(users){
 localStorage.setItem("users", JSON.stringify(users));
 }
 
-
-// show correct button on first visit
-window.addEventListener("DOMContentLoaded",()=>{
-
-let users=getUsers();
-
-let registerBtn=document.getElementById("registerBtn");
-let loginBtn=document.getElementById("loginBtn");
-
-if(registerBtn && loginBtn){
-if(users.length===0){
-loginBtn.style.display="none";
-}else{
-registerBtn.style.display="none";
-}
-}
-
-// show welcome if logged in
-let u=localStorage.getItem("loggedUser");
-let w=document.getElementById("welcome");
-if(u && w) w.innerText="Welcome "+u;
-
-});
-
-
-// ================= REGISTER =================
 function register(){
-
-let u=document.getElementById("username")?.value.trim();
-let p=document.getElementById("password")?.value.trim();
+let u=document.getElementById("username").value.trim();
+let p=document.getElementById("password").value.trim();
 
 if(!u || !p){
-alert("Enter username and password");
+alert("Enter username & password");
 return;
 }
 
@@ -60,48 +25,55 @@ alert("User already exists");
 return;
 }
 
-users.push({user:u,pass:p});
+users.push({user:u, pass:p});
 saveUsers(users);
 
-alert("Registered! Now login");
-location.reload();
+alert("Registered! Now login.");
 }
 
-
-// ================= LOGIN =================
 function login(){
-
-let u=document.getElementById("username")?.value.trim();
-let p=document.getElementById("password")?.value.trim();
-
-if(!u || !p){
-alert("Enter credentials");
-return;
-}
+let u=document.getElementById("username").value.trim();
+let p=document.getElementById("password").value.trim();
 
 let users=getUsers();
 let found=users.find(x=>x.user===u && x.pass===p);
 
-if(!found){
+if(found){
+localStorage.setItem("loggedUser", u);
+showSite();
+}else{
 alert("Invalid login");
-return;
+}
 }
 
-localStorage.setItem("loggedUser",u);
-location.href="planner.html";
-}
-
-
-// ================= LOGOUT =================
 function logout(){
 localStorage.removeItem("loggedUser");
-location.href="index.html";
+location.reload();
+}
+
+function showSite(){
+let login=document.getElementById("loginScreen");
+let site=document.getElementById("mainSite");
+
+if(login) login.style.display="none";
+if(site) site.style.display="block";
 }
 
 
-// ================= SUBJECT STORAGE =================
+window.addEventListener("DOMContentLoaded",()=>{
+let u=localStorage.getItem("loggedUser");
+if(u) showSite();
+
+renderSubjects();
+renderChart();
+updateTime();
+});
+
+
+
 function getData(){
 let u=localStorage.getItem("loggedUser");
+if(!u) return [];
 return JSON.parse(localStorage.getItem("subjects_"+u) || "[]");
 }
 
@@ -110,10 +82,7 @@ let u=localStorage.getItem("loggedUser");
 localStorage.setItem("subjects_"+u, JSON.stringify(data));
 }
 
-
-// ================= SUBJECT FUNCTIONS =================
 function addSubject(){
-
 let input=document.getElementById("subjectInput");
 if(!input) return;
 
@@ -126,38 +95,34 @@ saveData(data);
 
 input.value="";
 renderSubjects();
+renderChart();
 }
 
-
-function addTask(index){
-
-let input=document.getElementById("taskInput"+index);
+function addTask(i){
+let input=document.getElementById("taskInput"+i);
 if(!input) return;
 
 let text=input.value.trim();
 if(!text) return;
 
 let data=getData();
-data[index].tasks.push({text:text,done:false});
+data[i].tasks.push({text:text,done:false});
 saveData(data);
 
 renderSubjects();
+renderChart();
 }
 
-
 function toggleTask(s,t){
-
 let data=getData();
 data[s].tasks[t].done=!data[s].tasks[t].done;
 saveData(data);
 
 renderSubjects();
+renderChart();
 }
 
-
-// ================= RENDER SUBJECTS =================
 function renderSubjects(){
-
 let container=document.getElementById("subjects");
 if(!container) return;
 
@@ -165,30 +130,32 @@ container.innerHTML="";
 let data=getData();
 
 data.forEach((sub,i)=>{
-
 let div=document.createElement("div");
 div.className="subject";
 
-let html=`<h3>${sub.name}</h3>
+let html=`
+<h3>${sub.name}</h3>
 <input id="taskInput${i}" placeholder="New task">
 <button onclick="addTask(${i})">Add</button>
-<ul>`;
+<ul>
+`;
 
 sub.tasks.forEach((task,t)=>{
-html+=`<li class="${task.done?"done":""}" onclick="toggleTask(${i},${t})">${task.text}</li>`;
+html+=`
+<li class="${task.done?"done":""}" onclick="toggleTask(${i},${t})">
+${task.text}
+</li>
+`;
 });
 
 html+="</ul>";
 div.innerHTML=html;
 container.appendChild(div);
-
 });
 }
 
-renderSubjects();
 
 
-// ================= TIMER =================
 let time=1500;
 let interval;
 
@@ -198,11 +165,16 @@ clearInterval(interval);
 interval=setInterval(()=>{
 time--;
 updateTime();
-if(time<=0) clearInterval(interval);
+
+if(time<=0){
+clearInterval(interval);
+alert("Session Complete!");
+}
 },1000);
 }
 
 function resetTimer(){
+clearInterval(interval);
 time=1500;
 updateTime();
 }
@@ -213,15 +185,15 @@ if(!el) return;
 
 let m=Math.floor(time/60);
 let s=time%60;
+
 el.innerText=`${m}:${s<10?"0"+s:s}`;
 }
 
 
-// ================= CHART =================
-window.onload=function(){
 
+function renderChart(){
 let ctx=document.getElementById("chart");
-if(!ctx) return;
+if(!ctx || typeof Chart==="undefined") return;
 
 let data=getData();
 
@@ -238,4 +210,4 @@ data:values
 }]
 }
 });
-};
+}
