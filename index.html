@@ -1,36 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Study Planner</title>
+<meta charset="UTF-8">
+<title>Smart Study</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 
+<div id="loginScreen" class="login-page">
+
+<div class="login-card">
+
+<h2>Smart Study</h2>
+<p class="subtitle">Login to continue</p>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+
+<button class="btn-primary" onclick="login()">Login</button>
+<button class="btn-outline" onclick="register()">Create Account</button>
+
+<p id="welcome" class="welcome"></p>
+
+</div>
+
+</div>
+<div id="mainSite" style="display:none">
+
+<header class="nav">
+<div class="logo">📘 Smart Study</div>
+
 <nav>
-<a href="index.html">Home</a>
+<a href="#">Home</a>
 <a href="planner.html">Planner</a>
 <a href="timer.html">Timer</a>
 <a href="stats.html">Stats</a>
+<button onclick="logout()" class="start-btn">Logout</button>
 </nav>
+</header>
 
 
-<h1>Smart Study Planner</h1>
+<section class="hero">
 
-<div class="box">
-<h2>Login</h2>
+<div class="left">
 
-<input id="username" placeholder="Enter name"><br>
-<input id="password" type="password" placeholder="Enter password"><br>
+<div class="tag">⏱ Study smarter, not harder</div>
 
-<button id="registerBtn" onclick="register()">Register</button>
-<button id="loginBtn" onclick="login()">Login</button>
+<h1>
+Plan Your Study,<br>
+<span>Master Your Goals</span>
+</h1>
 
-<p id="welcome"></p>
+<p>
+Organize your schedule, track study sessions with a built-in timer,
+and visualize your progress — all in one beautifully simple app.
+</p>
+
+<div class="buttons">
+<a href="planner.html" class="primary">Start Planning →</a>
+<a href="#" class="secondary">Learn More</a>
+</div>
+
 </div>
 
 
+<div class="right">
+<div class="mock">
+
+<div class="card small">
+📅 <b>5 Tasks Today</b><br>
+<span>2 completed</span>
+</div>
+
+<div class="card">
+📊 <b>Progress +18%</b><br>
+<span>This week</span>
+</div>
+
+</div>
+</div>
+
+</section>
+
+</div>
+
 
 <script src="script.js"></script>
+
 </body>
 </html>
